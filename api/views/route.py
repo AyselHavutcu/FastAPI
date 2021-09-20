@@ -24,7 +24,7 @@ async def UserDataAPI(request: Request,background_tasks:BackgroundTasks):
         (select p2t.profile_id, p2t.created_at from residency_profile2task p2t inner join residency_task rt on p2t.task_id = rt.id and rt.project_id is not null
         inner join residency_level lvl on rt.level_id = lvl.id and lvl.level = 1) q2 on q2.profile_id = rp.id
         '''
-    result = await request.app.state.db.fetch_rows(query)
-    data = jsonable_encoder(result)
+    response_data = await request.app.state.db.fetch_rows(query)
+    data = jsonable_encoder(response_data)
     background_tasks.add_task(tasks._run_task,data)
     return data
